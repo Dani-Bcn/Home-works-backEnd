@@ -25,11 +25,20 @@ router.post("/", async (req,res,next)=>{
         const { id } = req.params
         try{
             const child = await Child.findById(id)
-            res.status(201).json({ data:child}); 
+            res.status(201).json({ data:child }); 
         }catch(error){
             next(error)
         }
-
     })
+    router.delete("/:id", async (req,res,next)=>{
+        const { id } = req.params
+        try{
+            const child = await Child.findByIdAndDelete(id)
+            res.status(201).json({ data:child }); 
+        }catch(error){
+            next(error)
+        }
+    })
+
 
 module.exports = router
