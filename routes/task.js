@@ -13,4 +13,16 @@ try{
 }
 
 })
+router.get("/", async (req,res,next)=>{
+  
+    try{
+    
+        const task = await Task.find({})
+        res.status(201).json({ data:task});
+    
+    }catch(error){
+        console.log(error)
+    }
+    
+    })
 module.exports = router;
