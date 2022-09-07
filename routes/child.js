@@ -20,5 +20,16 @@ router.post("/", async (req,res,next)=>{
         }
 
     })
+    
+    router.get("/:id", async (req,res,next)=>{
+        const { id } = req.params
+        try{
+            const child = await Child.findById(id)
+            res.status(201).json({ data:child}); 
+        }catch(error){
+            next(error)
+        }
+
+    })
 
 module.exports = router
