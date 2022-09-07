@@ -39,6 +39,18 @@ router.post("/", async (req,res,next)=>{
             next(error)
         }
     })
+    router.put('/:id', async (req, res, next) => {
+        const { id } = req.params
+        const { name, yearOfBirth, image, tasks }= req.body      
+      
+        try {     
+         
+          const updateChild = await Child.findByIdAndUpdate(id, req.body,{new:true});
+          res.status(202).json({ data: updateChild })
+        } catch (error) {
+          next(error);
+        }       
+      });
 
 
 module.exports = router
