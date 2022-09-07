@@ -15,14 +15,22 @@ try{
 })
 router.get("/", async (req,res,next)=>{
   
-    try{
-    
+    try{    
         const task = await Task.find({})
-        res.status(201).json({ data:task});
-    
+        res.status(201).json({ data:task});    
     }catch(error){
         console.log(error)
     }
     
     })
+    router.get("/:id", async (req,res,next)=>{
+        const { id } = req.params
+        try{    
+            const task = await Task.findById(id)
+            res.status(201).json({ data:task});    
+        }catch(error){
+            console.log(error)
+        }        
+     })
+
 module.exports = router;
