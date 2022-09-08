@@ -51,7 +51,7 @@ router.get("/:id", async (req,res,next)=>{
   }catch(error){
       next(error)
   }
-})
+})  
 
 router.put('/:id', async (req, res, next) => {
   const { id } = req.params
