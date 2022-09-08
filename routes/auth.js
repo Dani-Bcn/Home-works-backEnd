@@ -56,8 +56,9 @@ router.get("/:id", async (req, res, next) => {
     next(error)
   }
 });
-
-
+// @desc    GET all user
+// @route   GET /api/v1/auth/
+// @access  Public
 router.get("/", async (req, res, next) => {
   try {
     const findUser = await User.find({})
@@ -66,7 +67,9 @@ router.get("/", async (req, res, next) => {
     next(error)
   }
 });  
-
+// @desc    Edit user
+// @route   POST /api/v1/auth/edit/:id
+// @access  Private
 router.put('/edit', isAuthenticated, async (req, res, next) => {
   // req.payload = user
   const { username, email } = req.body;
@@ -79,9 +82,10 @@ router.put('/edit', isAuthenticated, async (req, res, next) => {
     console.error(error);
   }
 });
-
+// @desc    POST delete user
+// @route   GET /api/v1/auth/delete/:id
+// @access  Private
 router.delete("/:id", async (req,res,next)=>{
-
   const { id }= req.params
   try{
       const  deleteUser = await User.findByIdAndDelete(id)
