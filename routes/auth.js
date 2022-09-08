@@ -44,6 +44,36 @@ router.post('/signup', async (req, res, next) => {
   }
 });
 
+router.put('/:id', async (req, res, next) => {
+  const { id } = req.params
+  const { username, email, password}= req.body   
+  if(!id){
+    return next(new ErrorResponse('User not found', 400))
+  }   
+  if (email === "" || password === "" || username === "") {
+    return next(new ErrorResponse('Please fill all the fields to register', 400))
+  }     
+  try {              
+    const updateUser = await User.findByIdAndUpdate(id, req.body,{new:true});
+    res.status(202).json({ data: updateUser })
+  } catch (error) {
+    next(error);
+  }       
+});
+router.delete("/:id", async (req,res,next)=>{
+
+  const { id }= req.params
+  try{
+      const  deleteUser = await User.findByIdAndDelete(id)
+      res.status(201).json({ data:deleteUser }); 
+  }catch(error){
+    next(error)
+  }
+
+})
+
+
+
 // @desc    LOG IN user
 // @route   POST /api/v1/auth/login
 // @access  Public
