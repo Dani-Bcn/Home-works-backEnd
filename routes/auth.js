@@ -43,41 +43,43 @@ router.post('/signup', async (req, res, next) => {
     next(error);
   }
 });
-router.get("/:id", async (req,res,next)=>{
-  const { id } = req.params
-  try{
-      const findUser = await User.findById(id)
-      res.status(201).json({ data:findUser }); 
-  }catch(error){
-      next(error)
-  }
-})  
-router.get("/", async (req,res,next)=>{
- 
-  try{
-      const findUser = await User.find({})
-      res.status(201).json({ data:findUser }); 
-  }catch(error){
-      next(error)
-  }
-})  
 
-router.put('/:id', async (req, res, next) => {
+// @desc    GET one user
+// @route   GET /api/v1/auth/:id
+// @access  Public
+router.get("/:id", async (req, res, next) => {
   const { id } = req.params
-  const { username, email, password}= req.body   
-  if(!id){
-    return next(new ErrorResponse('User not found', 400))
-  }   
-  if (email === "" || password === "" || username === "") {
-    return next(new ErrorResponse('Please fill all the fields to register', 400))
-  }     
-  try {              
-    const updateUser = await User.findByIdAndUpdate(id, req.body,{new:true});
-    res.status(202).json({ data: updateUser })
+  try {
+    const findUser = await User.findById(id)
+    res.status(201).json({ data: findUser });
   } catch (error) {
-    next(error);
-  }       
+    next(error)
+  }
 });
+
+
+router.get("/", async (req, res, next) => {
+  try {
+    const findUser = await User.find({})
+    res.status(201).json({ data: findUser });
+  } catch (error) {
+    next(error)
+  }
+});  
+
+router.put('/edit', isAuthenticated, async (req, res, next) => {
+  // req.payload = user
+  const { username, email } = req.body;
+  const { _id } = req.payload;
+  try {
+    // Add validations in the future
+    const editedUser = User.findByIdAndUpdate(_id, { username, email }, { new: true });
+    res.status(201).json({ data: editedUser });
+  } catch (error) {
+    console.error(error);
+  }
+});
+
 router.delete("/:id", async (req,res,next)=>{
 
   const { id }= req.params

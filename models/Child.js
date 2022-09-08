@@ -15,7 +15,7 @@ const childSchema = new Schema({
         required:true
     },
     tasks:{
-        type:Array,        
+        type: [{ type: Schema.Types.ObjectId, ref: "Task" }],        
     }
     
 })

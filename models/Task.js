@@ -1,7 +1,6 @@
 const {Schema, model} = require('mongoose')
 
-const taskSchema = new Schema({
-    
+const taskSchema = new Schema({    
     name:{
         type:String,
         required:true

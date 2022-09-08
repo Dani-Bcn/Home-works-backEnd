@@ -9,7 +9,6 @@ router.post("/", async (req,res,next)=>{
         }catch(error){
             console.log(error)
         }
-
     })
     router.get("/", async (req,res,next)=>{    
         try{    
@@ -41,9 +40,7 @@ router.post("/", async (req,res,next)=>{
     router.put('/:id', async (req, res, next) => {
         const { id } = req.params
         const { name, image, description }= req.body      
-      
         try {     
-         
           const updateTask = await Task.findByIdAndUpdate(id, req.body,{new:true});
           res.status(202).json({ data: updateTask })
         } catch (error) {
