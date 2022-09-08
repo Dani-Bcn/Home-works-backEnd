@@ -43,6 +43,15 @@ router.post('/signup', async (req, res, next) => {
     next(error);
   }
 });
+router.get("/:id", async (req,res,next)=>{
+  const { id } = req.params
+  try{
+      const findUser = await User.findById(id)
+      res.status(201).json({ data:findUser }); 
+  }catch(error){
+      next(error)
+  }
+})
 
 router.put('/:id', async (req, res, next) => {
   const { id } = req.params
