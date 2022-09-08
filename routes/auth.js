@@ -5,7 +5,6 @@ const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
 const { isAuthenticated } = require('../middlewares/jwt');
 const saltRounds = 10;
-
 // @desc    SIGN UP new user
 // @route   POST /api/v1/auth/signup
 // @access  Public
@@ -43,7 +42,6 @@ router.post('/signup', async (req, res, next) => {
     next(error);
   }
 });
-
 // @desc    GET one user
 // @route   GET /api/v1/auth/:id
 // @access  Public
@@ -73,7 +71,7 @@ router.get("/", async (req, res, next) => {
 router.put('/edit', isAuthenticated, async (req, res, next) => {
   // req.payload = user
   const { username, email } = req.body;
-  const { _id } = req.payload;
+  const { _id } = req.payload._id
   try {
     // Add validations in the future
     const editedUser = User.findByIdAndUpdate(_id, { username, email }, { new: true });
@@ -93,7 +91,6 @@ router.delete("/:id", async (req,res,next)=>{
   }catch(error){
     next(error)
   }
-
 })
 // @desc    LOG IN user
 // @route   POST /api/v1/auth/login
@@ -135,7 +132,6 @@ router.post('/login', async (req, res, next) => {
     next(error)
   }
 });
-
 // @desc    GET logged in user
 // @route   GET /api/v1/auth/me
 // @access  Private
@@ -147,5 +143,4 @@ router.get('/me', isAuthenticated, (req, res, next) => {
   // previously set as the token payload
   res.status(200).json(req.payload);
 })
-
 module.exports = router;

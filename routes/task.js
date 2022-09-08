@@ -1,6 +1,8 @@
 const router = require("express").Router()
 const Task =require("../models/Task")
-
+// @desc   Create new task
+// @route   POST /api/v1/task
+// @access  Public
 router.post("/", async (req,res,next)=>{
     const {name, image, description} = req.body
         try{
@@ -10,6 +12,9 @@ router.post("/", async (req,res,next)=>{
             console.log(error)
         }
     })
+// @desc   Find all tasks
+// @route   GET/api/v1/task
+// @access  Public
     router.get("/", async (req,res,next)=>{    
         try{    
             const task = await Task.find({})
@@ -18,7 +23,9 @@ router.post("/", async (req,res,next)=>{
             next(error)
         }        
     })
-
+// @desc   Find one task
+// @route   GET/api/v1/task
+// @access  Public
     router.get("/:id", async (req,res,next)=>{
         const { id } = req.params
             try{    
@@ -28,6 +35,9 @@ router.post("/", async (req,res,next)=>{
                next(error)
             }        
     })
+// @desc   Delete task
+// @route   DELETE /api/v1/task
+// @access  Public
     router.delete("/:id", async (req,res,next)=>{
         const { id } = req.params
             try{    
@@ -37,6 +47,9 @@ router.post("/", async (req,res,next)=>{
                 next(error)
             }        
     })
+// @desc  Edit  task
+// @route   PUT /api/v1/task
+// @access  Public
     router.put('/:id', async (req, res, next) => {
         const { id } = req.params
         const { name, image, description }= req.body      
@@ -47,5 +60,4 @@ router.post("/", async (req,res,next)=>{
           next(error);
         }       
       });
-
 module.exports = router;
