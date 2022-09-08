@@ -89,9 +89,6 @@ router.delete("/:id", async (req,res,next)=>{
   }
 
 })
-
-
-
 // @desc    LOG IN user
 // @route   POST /api/v1/auth/login
 // @access  Public
