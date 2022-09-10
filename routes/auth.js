@@ -66,15 +66,14 @@ router.get("/", async (req, res, next) => {
   }
 });  
 // @desc    Edit user
-// @route   POST /api/v1/auth/edit/:id
+// @route   POST /api/v1/auth/edit
 // @access  Private
 router.put('/edit', isAuthenticated, async (req, res, next) => {
-  // req.payload = user
-  const { username, email } = req.body;
+  const { username } = req.body;
   const { _id } = req.payload._id
   try {
     // Add validations in the future
-    const editedUser = User.findByIdAndUpdate(_id, { username, email }, { new: true });
+    const editedUser = User.findByIdAndUpdate(_id, { username }, { new: true });
     res.status(201).json({ data: editedUser });
   } catch (error) {
     console.error(error);

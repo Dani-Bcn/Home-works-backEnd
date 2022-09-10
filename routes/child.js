@@ -24,12 +24,12 @@ router.get("/", async (req,res,next)=>{
         }
     })
 // @desc   Find one child
-// @route   GET/api/v1/child
+// @route   GET/api/v1/child/:id
 // @access  Public
     router.get("/:id", async (req,res,next)=>{
         const { id } = req.params
         try{
-            const child = await Child.findById(id);
+            const child = await Child.findById(id).populate("tasks");
             res.status(201).json({ data:child }); 
         }catch(error){
             next(error)
