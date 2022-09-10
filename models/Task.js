@@ -9,8 +9,8 @@ const taskSchema = new Schema({
         type:String,
         required:true
     },
-    description:{
-        type:String,
+    points:{
+        type:Number,
         rquired:true
     }
 })
