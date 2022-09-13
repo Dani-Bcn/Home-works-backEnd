@@ -1,16 +1,16 @@
-const router = require("express").Router()
+const router = require("express").Router();
 const Child = require("../models/Child")
 const fileUploader = require("../config/cloudinary.config");
-
-
+const { isAuthenticated } = require('../middlewares/jwt');
 
 // @desc   Create new child
 // @route   POST /api/v1/child
 // @access  Public
-router.post("/", async (req,res,next)=>{
+router.post("/", isAuthenticated, async (req,res,next)=>{
+    console.log('Creating:', req.payload)
     const {name, yearOfBirth, imageUrl, tasks} = req.body
         try{
-            const child = await Child.create({name, yearOfBirth, imageUrl ,tasks})
+            const child = await Child.create({name, yearOfBirth, imageUrl ,tasks, user: req.payload._id })
             res.status(201).json({ data:child });
         }catch(error){
            console.log(error)
@@ -27,6 +27,20 @@ router.get("/", async (req,res,next)=>{
             next(error)
         }
     })
+
+// @desc   Find all child
+// @route   GET /api/v1/child/mine
+// @access  Public
+router.get("/mine", isAuthenticated, async (req,res,next)=>{
+    console.log('Getting children:', req.payload);
+    try{
+        const child = await Child.find({ user: req.payload._id })
+        console.log(child)
+        res.status(201).json({ data:child}); 
+    }catch(error){
+        next(error)
+    }
+})
 // @desc   Find one child
 // @route   GET/api/v1/child/:id
 // @access  Public

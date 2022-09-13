@@ -1,4 +1,4 @@
-const {Schema, model} = require("mongoose")
+const {mongoose, Schema, model} = require("mongoose")
 
 const childSchema = new Schema({
 
@@ -12,9 +12,14 @@ const childSchema = new Schema({
     imageUrl:{
         type:String,      
     },
-    tasks:{
-        type: [{ type: Schema.Types.ObjectId, ref: "Task" }]      
-    }
+    tasks: {
+        type: [mongoose.Schema.ObjectId],
+        ref: 'Task',
+      },
+    user: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+      },
 })
 module.exports = model("Child", childSchema)
 
