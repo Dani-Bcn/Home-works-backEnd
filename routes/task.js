@@ -4,9 +4,9 @@ const Task =require("../models/Task")
 // @route   POST /api/v1/task
 // @access  Public
 router.post("/", async (req,res,next)=>{
-    const {name, image, description} = req.body
+    const {name, imageUrl, description} = req.body
         try{
-            const task = await Task.create( {name, image, description})
+            const task = await Task.create( {name, imageUrl, description})
             res.status(201).json({ data:task});
         }catch(error){
             console.log(error)
@@ -52,7 +52,7 @@ router.post("/", async (req,res,next)=>{
 // @access  Public
     router.put('/:id', async (req, res, next) => {
         const { id } = req.params
-        const { name, image, description }= req.body      
+        const { name, imageUrl, description }= req.body      
         try {     
           const updateTask = await Task.findByIdAndUpdate(id, req.body,{new:true});
           res.status(202).json({ data: updateTask })

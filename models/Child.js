@@ -5,19 +5,16 @@ const childSchema = new Schema({
     name:{
         type:String,
         required:true
-    },
+    },   
     yearOfBirth:{
-        type:Number,
-        required:true
+        type:Number,      
     },
-    image:{
-        type:String,
-        required:true
+    imageUrl:{
+        type:String,      
     },
     tasks:{
-        type: [{ type: Schema.Types.ObjectId, ref: "Task" }],        
+        type: [{ type: Schema.Types.ObjectId, ref: "Task" }]      
     }
-    
 })
 module.exports = model("Child", childSchema)
 

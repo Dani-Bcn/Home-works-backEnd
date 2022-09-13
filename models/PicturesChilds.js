@@ -7,10 +7,6 @@ const taskSchema = new Schema({
     },
     imageUrl:{
         type:String,
-    },
-    points:{
-        type:Number,
-        rquired:true
     }
 })
 

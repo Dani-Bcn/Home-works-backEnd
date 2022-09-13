@@ -4,6 +4,7 @@ const ErrorResponse = require('../utils/error');
 const bcrypt = require('bcryptjs');
 const jwt = require("jsonwebtoken");
 const { isAuthenticated } = require('../middlewares/jwt');
+
 const saltRounds = 10;
 // @desc    SIGN UP new user
 // @route   POST /api/v1/auth/signup
@@ -90,7 +91,13 @@ router.delete("/:id", async (req,res,next)=>{
   }catch(error){
     next(error)
   }
-})
+})    
+
+
+
+
+
+
 // @desc    LOG IN user
 // @route   POST /api/v1/auth/login
 // @access  Public
