@@ -17,7 +17,6 @@ router.get("/:id", async (req, res, next) => {
       next(error)
     }
   });
-
 // @desc    GET all user
 // @route   GET /api/v1/auth/
 // @access  Public

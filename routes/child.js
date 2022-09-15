@@ -6,6 +6,7 @@ const { isAuthenticated } = require('../middlewares/jwt');
 // @desc   Create new child
 // @route   POST /api/v1/child
 // @access  Public
+console.log("cocococo")
 router.post("/", isAuthenticated, async (req,res,next)=>{
     console.log('Creating:', req.payload)
     const {name, yearOfBirth, imageUrl, tasks} = req.body
@@ -27,7 +28,6 @@ router.get("/", async (req,res,next)=>{
             next(error)
         }
     })
-
 // @desc   Find all child
 // @route   GET /api/v1/child/mine
 // @access  Public
@@ -35,13 +35,12 @@ router.get("/mine", isAuthenticated, async (req,res,next)=>{
     console.log('Getting children:', req.payload);
     try{
         const child = await Child.find({ user: req.payload._id })
-        console.log(child)
+        // console.log(child)
         res.status(201).json({ data:child}); 
     }catch(error){
         next(error)
     }
 })
-
 // @desc   Find one child
 // @route   GET/api/v1/child/:id
 // @access  Public
@@ -85,13 +84,27 @@ router.get("/mine", isAuthenticated, async (req,res,next)=>{
 router.put('/addTask/:childId/:taskId', async (req, res, next) => {
      const { childId, taskId } = req.params;
      try {
-      const child = await Child.findById(childId);
+      const child = await Child.findById(childId);     
       child.tasks.push(taskId);
        child.save();
        res.status(202).json({ data: child })
      } catch (error) {
        next(error);
-    }
+    } 
+});
+router.put('/deleteTask/:childId/:taskId', async (req, res, next) => {
+  
+    const { childId, tasksId} = req.params;
+         
+    try { 
+        const child= await Child.findById(childId) 
+        await  
+
+          
+        res.status(201).json({ data:child});    
+    } catch (error) {
+      next(error);
+   }
 });
 // @desc    Upload a picture to Cloudinary
 // @route   POST /api/v1/child/upload
@@ -102,12 +115,10 @@ router.post("/upload", fileUploader.single("imageUrl"), (req, res, next) => {
       return;
     }
     res.json({ fileUrl: req.file.path });
-  });  
-  
+  });    
    //@desc    Create a image child
    //@route   POST /api/v1/
    //@access  Public
-
 router.post('/', async (req, res, next) => {
    const { title, yearOfBirth, imageUrl, tasks} = req.body;
    try {
