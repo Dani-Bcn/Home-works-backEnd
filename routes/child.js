@@ -41,6 +41,7 @@ router.get("/mine", isAuthenticated, async (req,res,next)=>{
         next(error)
     }
 })
+
 // @desc   Find one child
 // @route   GET/api/v1/child/:id
 // @access  Public
@@ -81,38 +82,31 @@ router.get("/mine", isAuthenticated, async (req,res,next)=>{
 // @desc   Add task child
 // @route   PUT /api/v1/child
 // @access  Public  
-// router.put('/addTask/:childId/:taskId', async (req, res, next) => {
-//     const { childId, taskId } = req.params;
-//     try {
-//       const child = await Child.findById(childId);
-//       child.tasks.push(taskId);
-//       child.save();
-//       res.status(202).json({ data: child })
-//     } catch (error) {
-//        next(error);
-//     }
-// });
-
-
-
+router.put('/addTask/:childId/:taskId', async (req, res, next) => {
+     const { childId, taskId } = req.params;
+     try {
+      const child = await Child.findById(childId);
+      child.tasks.push(taskId);
+       child.save();
+       res.status(202).json({ data: child })
+     } catch (error) {
+       next(error);
+    }
+});
 // @desc    Upload a picture to Cloudinary
 // @route   POST /api/v1/child/upload
 // @access  Private
-router.post("/upload", fileUploader.single("imageUrl"), (req, res, next) => {
- 
-    if (!req.file) {
-      
+router.post("/upload", fileUploader.single("imageUrl"), (req, res, next) => { 
+    if (!req.file) {      
       next(new ErrorResponse('Error uploading the image', 500));
       return;
     }
     res.json({ fileUrl: req.file.path });
-  });
-  
+  });  
   
    //@desc    Create a image child
    //@route   POST /api/v1/
    //@access  Public
-
 
 router.post('/', async (req, res, next) => {
    const { title, yearOfBirth, imageUrl, tasks} = req.body;
