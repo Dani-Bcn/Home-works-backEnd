@@ -20,6 +20,13 @@ const childSchema = new Schema({
         type: mongoose.Schema.ObjectId,
         ref: 'User',
       },
+    points:{
+        type:Number
+    },
+    cups:{
+        type:Number
+    }
+
 })
 module.exports = model("Child", childSchema)
 
