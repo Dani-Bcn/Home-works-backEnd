@@ -7,10 +7,13 @@ const cors = require('cors');
 const errorHandler = require('./middlewares/errorHandler');
 
 // Routers require
+
+// const userRouter = require('./routes/user')
 const indexRouter = require('./routes/index');
 const authRouter = require('./routes/auth');
 const taskRouter = require('./routes/task')
 const childRouter = require('./routes/child')
+
 
 const app = express();
 
@@ -29,10 +32,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // routes intro
+
 app.use('/', indexRouter);
+
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/task', taskRouter)
 app.use('/api/v1/child', childRouter)
+// app.use('/api/v1/user', userRouter)
 app.use(errorHandler);
 
 // catch 404 and forward to error handler

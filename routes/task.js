@@ -52,7 +52,7 @@ router.post("/", async (req,res,next)=>{
 // @access  Public
     router.put('/:id', async (req, res, next) => {
         const { id } = req.params
-        const { name, imageUrl, points}= req.body      
+        const { name, points}= req.body      
         try {     
           const updateTask = await Task.findByIdAndUpdate(id, req.body,{new:true});
           res.status(202).json({ data: updateTask })

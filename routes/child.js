@@ -3,13 +3,16 @@ const Child = require("../models/Child")
 const Task = require("../models/Task")
 const fileUploader = require("../config/cloudinary.config");
 const { isAuthenticated } = require('../middlewares/jwt');
+const date = new Date()
+console.log(date.getDay())
 
 // @desc   Create new child
 // @route   POST /api/v1/child
 // @access  Public
 router.post("/", isAuthenticated, async (req,res,next)=>{
-    console.log('Creating:', req.payload)
+    // console.log('Creating:', req.payload)
     const {name, yearOfBirth, imageUrl, tasks, points, cups} = req.body
+ 
         try{
             const child = await Child.create({name, yearOfBirth, imageUrl ,tasks, points, cups, user: req.payload._id })
             res.status(201).json({ data:child });
@@ -23,19 +26,21 @@ router.post("/", isAuthenticated, async (req,res,next)=>{
 router.get("/", async (req,res,next)=>{
         try{
             const child = await Child.find({})
+         
             res.status(201).json({ data:child}); 
         }catch(error){
             next(error)
         }
     })
+
 // @desc   Find all child
 // @route   GET /api/v1/child/mine
 // @access  Public
 router.get("/mine", isAuthenticated, async (req,res,next)=>{
-    console.log('Getting children:', req.payload);
+    // console.log('Getting children:', req.payload);
     try{
         const child = await Child.find({ user: req.payload._id })
-        // console.log(child)
+     
         res.status(201).json({ data:child}); 
     }catch(error){
         next(error)
@@ -48,11 +53,25 @@ router.get("/mine", isAuthenticated, async (req,res,next)=>{
         const { id } = req.params
         try{
             const child = await Child.findById(id).populate("tasks");
-            res.status(201).json({ data:child }); 
+            res.status(201).json({ data:child });
+          
         }catch(error){
-            next(error)
+            next(error)  
         }
     })
+// @desc   Find one task
+// @route   GET/api/v1/task
+// @access  Public
+    // router.get("/:id", async (req,res,next)=>{
+    //     const { id } = req.params
+    //         try{    
+    //             const task = await Task.findById(id)
+    //             console.log(task)
+    //             res.status(201).json({ data:task});    
+    //         }catch(error){
+    //            next(error)
+    //         }        
+    //})
 // @desc   Delete  child
 // @route   DELETE /api/v1/child
 // @access  Public
@@ -86,6 +105,7 @@ router.put('/addTask/:childId/:taskId', async (req, res, next) => {
      try {
       const child = await Child.findById(childId);     
       child.tasks.push(taskId);
+      console.log(child)
        child.save();
        res.status(202).json({ data: child })
      } catch (error) {
@@ -96,10 +116,11 @@ router.put('/addTask/:childId/:taskId', async (req, res, next) => {
 // @route   PUT /api/v1/child
 // @access  Public  
 router.put('/deleteTask/:childId/:taskId', async (req, res, next) => {  
-    const { childId, taskId} = req.params;         
+    const { childId, taskId} = req.params; 
+      
     try { 
-        const child= await Child.findById(childId) 
-        child.tasks.pull(taskId);
+        const child= await Child.findById(childId)        
+        child.tasks.pull(taskId);   
         child.save();          
         res.status(201).json({ data:child});    
     } catch (error) {
@@ -110,19 +131,19 @@ router.put('/deleteTask/:childId/:taskId', async (req, res, next) => {
 // @route   PUT /api/v1/child
 // @access  Public  
 router.put('/addPoints/:childId/:taskId', async (req, res, next) => {  
-    const { childId, taskId} = req.params;         
+    const { childId, taskId} = req.params;        
     try { 
+        const task= await Task.findById(taskId) 
+        console.log(task.points)
         const child= await Child.findById(childId) 
          child.tasks.pull(taskId);
-        child.points = child.points + 30;
-       
-       
+        child.points = child.points + task.points;       
         child.save();          
         res.status(201).json({ data:child});    
     } catch (error) {
       next(error);
    }
-});
+});  
 
 // @desc    Upload a picture to Cloudinary
 // @route   POST /api/v1/child/upload
