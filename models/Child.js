@@ -23,10 +23,12 @@ const childSchema = new Schema({
     points:{
         type:Number
     },
+    pointsCup:{
+        type:Number
+    },
     cups:{
         type:Number
     }
-
 })
 module.exports = model("Child", childSchema)
 
