@@ -5,16 +5,16 @@ const fileUploader = require("../config/cloudinary.config");
 const { isAuthenticated } = require('../middlewares/jwt');
 const date = new Date()
 const day = date.getDay()
-const hour = date.getHours()
-console.log(hour, day)
+// const hour = date.getHours()
+// console.log(hour, day)
 // @desc   Create new child
 // @route   POST /api/v1/child
 // @access  Public
 router.post("/", isAuthenticated, async (req,res,next)=>{
     // console.log('Creating:', req.payload)
-    const {name, yearOfBirth, imageUrl, tasks, points, pointsCup, cups} = req.body 
+    const {name, yearOfBirth, imageUrl, tasks, points, pointsCup, cups, goalTasks, taskDone} = req.body 
         try{
-            const child = await Child.create({name, yearOfBirth, imageUrl ,tasks, points,  cups, pointsCup, user: req.payload._id })
+            const child = await Child.create({name, yearOfBirth, imageUrl ,tasks, points,  cups, pointsCup, goalTasks, taskDone, user: req.payload._id })
             res.status(201).json({ data:child });
         }catch(error){
            console.log(error)
@@ -27,7 +27,7 @@ router.get("/", async (req,res,next)=>{
     try{
         const child = await Child.find({})         
         res.status(201).json({ data:child}); 
-        console.log(  child)
+        // console.log(child)
     }catch(error){
             next(error)
     }
@@ -73,7 +73,7 @@ router.get("/mine", isAuthenticated, async (req,res,next)=>{
 // @access  Public
     router.put('/:id', async (req, res, next) => {
         const {id} =req.params
-        const { name, yearOfBirth, imageUrl, tasks, points, pointsCup }= req.body         
+        const { name, yearOfBirth, imageUrl, tasks, points, pointsCup, goalTasks, taskDone }= req.body         
         try {              
           const updateChild = await Child.findByIdAndUpdate(id, req.body,{new:true});
           res.status(202).json({ data: updateChild })
@@ -87,9 +87,11 @@ router.get("/mine", isAuthenticated, async (req,res,next)=>{
 router.put('/addTask/:childId/:taskId', async (req, res, next) => {
     const { childId, taskId } = req.params;
     try {
-        const child = await Child.findById(childId);     
+        const child = await Child.findById(childId);    
+        child.goalTasks = child.goalTasks + 1;  
+        // console.log(child.goalTasks * child.taskDone / 100)  
         child.tasks.push(taskId);
-        console.log(child)
+        // console.log(child)
         child.save();
         res.status(202).json({ data: child })
     } catch (error) {
@@ -102,7 +104,8 @@ router.put('/addTask/:childId/:taskId', async (req, res, next) => {
 router.put('/deleteTask/:childId/:taskId', async (req, res, next) => {  
     const { childId, taskId} = req.params;      
     try { 
-        const child= await Child.findById(childId)        
+        const child= await Child.findById(childId)
+        child.goalTasks = child.goalTasks - 1;             
         child.tasks.pull(taskId);   
         child.save();          
         res.status(201).json({ data:child});    
@@ -114,17 +117,31 @@ router.put('/deleteTask/:childId/:taskId', async (req, res, next) => {
 // @route   PUT /api/v1/child
 // @access  Public  
 router.put('/addPoints/:childId/:taskId', async (req, res, next) => {  
-    const { childId, taskId} = req.params;        
+    const { childId, taskId} = req.params;         
     try { 
         const task = await Task.findById(taskId) 
         // console.log(task.points)
         const child = await Child.findById(childId) 
         child.tasks.pull(taskId);
-        child.points = child.points + task.points;   
-        child.pointsCup = child.pointsCup + task.points;         
-        child.save();          
+        child.taskDone = child.taskDone + 1
+        child.points = child.points + task.points;          
+        child.pointsCup = child.pointsCup + task.points; 
+        console.log(child.taskDone / child.goalTasks *100)  
+        if(child.pointsCup > 1000 ){
+            child.cups =1
+        }
+        if(child.pointsCup > 2000 ){
+            child.cups =2
+        }        
+        if(child.pointsCup > 3000 ){
+            child.cups =3
+        }
+        if(child.pointsCup > 4000 ){
+            child.cups =4
+        }  
+        child.save();           
         res.status(201).json({ data:child});  
-           //  if (child.pointsCup < 150){
+        //  if (child.pointsCup < 150){
         //     child.cups = child.cups + task.points;   
         // }        
     } catch (error) {
@@ -138,7 +155,19 @@ router.put('/resetPoints/:childId', async (req, res, next) => {
     const { childId} = req.params;        
     try {       
         const child= await Child.findById(childId)        
-        child.points = 0;       
+        child.points = 0; 
+        child.goalTasks = 0      
+        child.save();          
+        res.status(201).json({ data:child});    
+    } catch (error) {
+      next(error);
+   }
+});
+router.put('/resetCups/:childId', async (req, res, next) => {  
+    const { childId} = req.params;        
+    try {       
+        const child= await Child.findById(childId)        
+        child.cups = 0;        
         child.save();          
         res.status(201).json({ data:child});    
     } catch (error) {
@@ -159,9 +188,9 @@ router.post("/upload", fileUploader.single("imageUrl"), (req, res, next) => {
    //@route   POST /api/v1/
    //@access  Public
 router.post('/', async (req, res, next) => {
-   const { title, yearOfBirth, imageUrl, tasks, points, cups, pointsCup} = req.body;
+   const { title, yearOfBirth, imageUrl, tasks, points, cups, pointsCup, goalTasks, taskDone} = req.body;
    try {
-        const imgChild = await Child.create({ title, yearOfBirth, imageUrl, tasks, points,  cups, pointsCup });
+        const imgChild = await Child.create({ title, yearOfBirth, imageUrl, tasks, points,  cups, pointsCup, goalTasks, taskDone });
         if (!imgChild) {
             next(new ErrorResponse('An error ocurred while creating the project', 500));
         return;

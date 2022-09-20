@@ -28,6 +28,12 @@ const childSchema = new Schema({
     },
     cups:{
         type:Number
+    },
+    goalTasks:{
+        type:Number
+    },
+    taskDone:{
+        type:Number
     }
 })
 module.exports = model("Child", childSchema)
