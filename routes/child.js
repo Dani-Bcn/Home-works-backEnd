@@ -89,7 +89,7 @@ router.put('/addTask/:childId/:taskId', async (req, res, next) => {
     try {
         const child = await Child.findById(childId);    
         child.goalTasks = child.goalTasks + 1;  
-        // console.log(child.goalTasks * child.taskDone / 100)  
+        // console.log(child.goalTasks * child.taskDone / 100)   
         child.tasks.push(taskId);
         // console.log(child)
         child.save();
