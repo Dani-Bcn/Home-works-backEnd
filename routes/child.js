@@ -156,7 +156,8 @@ router.put('/resetPoints/:childId', async (req, res, next) => {
     try {       
         const child= await Child.findById(childId)        
         child.points = 0; 
-        child.goalTasks = 0      
+        child.goalTasks = 0 
+        child.taskDone = 0      
         child.save();          
         res.status(201).json({ data:child});    
     } catch (error) {
@@ -167,7 +168,9 @@ router.put('/resetCups/:childId', async (req, res, next) => {
     const { childId} = req.params;        
     try {       
         const child= await Child.findById(childId)        
-        child.cups = 0;        
+        child.cups = 0;          
+        child.pointsCup = 0 
+        child.tasks = []
         child.save();          
         res.status(201).json({ data:child});    
     } catch (error) {

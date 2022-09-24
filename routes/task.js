@@ -38,7 +38,7 @@ router.post("/", async (req,res,next)=>{
 // @desc   Delete task
 // @route   DELETE /api/v1/task
 // @access  Public
-    router.delete("delete/:id", async (req,res,next)=>{
+    router.delete("/:id", async (req,res,next)=>{
         const { id } = req.params
             try{    
                 const task = await Task.findByIdAndDelete(id)
