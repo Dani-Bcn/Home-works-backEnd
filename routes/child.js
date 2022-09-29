@@ -7,6 +7,7 @@ const date = new Date()
 const day = date.getDay()
 // const hour = date.getHours()
 // console.log(hour, day)
+
 // @desc   Create new child
 // @route   POST /api/v1/child
 // @access  Public
@@ -57,7 +58,7 @@ router.get("/mine", isAuthenticated, async (req,res,next)=>{
         }
     })
 // @desc   Delete  child
-// @route   DELETE /api/v1/child
+// @route   DELETE /api/v1/child/:id
 // @access  Public
     router.delete("/:id", async (req,res,next)=>{
         const { id } = req.params
@@ -69,7 +70,7 @@ router.get("/mine", isAuthenticated, async (req,res,next)=>{
         }
     })
 // @desc   Edit child
-// @route   PUT/api/v1/child
+// @route   put /api/v1/child/:id
 // @access  Public
     router.put('/:id', async (req, res, next) => {
         const {id} =req.params

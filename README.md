@@ -73,49 +73,6 @@ const childSchema = new Schema({
     }
 })
 module.exports = model("Child", childSchema)
-----------------------------
-const taskSchema = new Schema({    
-    name:{
-        type:String,
-        required:true
-    },
-    imageUrl:{
-        type:String,
-    },
-    points:{
-        type:Number,
-        rquired:true
-    }
-})
-
-module.exports = model("Task", taskSchema)
---------------------------
-const userSchema = new Schema({
-  
-  email: {
-    type: String,
-    unique: true,
-    required: true
-  },
-  hashedPassword: {
-    type: String,
-    required: true
-  },
-  username: {
-    type: String,
-    required: true
-  },
-  role: {
-    type: String,
-    enum: ['user', 'admin'],
-    default: 'user'
-  }
-},
-  {
-    timestamps: true
-  });
-
-module.exports = model("User", userSchema);
 ```
 
 ---
@@ -124,16 +81,20 @@ module.exports = model("User", userSchema);
 
 | Action           | Method    | Endpoint             | Req.body                        | Private/Public |
 |------------------|-----------|----------------------|---------------------------------|-----------------|
-| SIGN UP user     | POST      | /api/v1/auth/signup  | { username, email, password }   |    Public |                 
-| LOG IN user      | POST      | /api/v1/auth/login   | { email, password }             |    Public |                  
-| GET logged in user   | GET     | /api/v1/auth/me    |   | Private |
-
----
+| SIGN UP user     | POST      | /api/v1/auth/signup  | { username, email, password }   |    Public       |                 
+| LOG IN user      | POST      | /api/v1/auth/login   | { email, password }             |    Public       |                  
+| GET logged in user   | GET   | /api/v1/auth/me      | | Private |                     |    Private      |   
+| Create new child | POST      | /api/v1/child        | | Private |                     |    Private      | 
+| Find all child   | GET       | /api/v1/child/mine   | | Private |                     |    Private      |                   
+| Find one child   | GET       | /api/v1/child/:id    | | Private |                     |    Private      | 
+| Delete  child    | POST      | /api/v1/child        | | Private |                     |    Private      | 
+| Edit child       | POST      | /api/v1/child/:id    | | Private |                     |    Private      | 
+| Add task child   | POST      | /api/v1/child:id     | | Private |                     |    Private      |
+ ---
 
 ## Useful links
 
-- [Presentation slides]()
-- [Frontend repository]()
-- [Frontend deploy]()
-- [Deployed REST API]()
+- [https://slides.com/daniperez-2/deck-063a6c]()
+- [https://github.com/Dani-Bcn/Tareas-frontend]()
+- [https://homework-kids.netlify.app/]()
 
