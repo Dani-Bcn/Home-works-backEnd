@@ -1,7 +1,7 @@
 # Project's name REST API
 ## Description
 
-This is a the backend repository for the React application `app's name`.
+This is a the backend repository for the React application `HomerWorkforKids`.
 
 ---
 
@@ -36,11 +36,86 @@ npm run seed
 Users in the database have the following properties:
 
 ```js
-{
-  "username": String,
-  "email": String,
-  "hashedPassword": String
-}
+const childSchema = new Schema({
+
+    name:{
+        type:String,
+        required:true
+    },   
+    yearOfBirth:{
+        type:Number,      
+    },
+    imageUrl:{
+        type:String,      
+    },
+    tasks: {
+        type: [mongoose.Schema.ObjectId],
+        ref: 'Task',
+      },
+    user: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+      },
+    points:{
+        type:Number
+    },
+    pointsCup:{
+        type:Number
+    },
+    cups:{
+        type:Number
+    },
+    goalTasks:{
+        type:Number
+    },
+    taskDone:{
+        type:Number
+    }
+})
+module.exports = model("Child", childSchema)
+----------------------------
+const taskSchema = new Schema({    
+    name:{
+        type:String,
+        required:true
+    },
+    imageUrl:{
+        type:String,
+    },
+    points:{
+        type:Number,
+        rquired:true
+    }
+})
+
+module.exports = model("Task", taskSchema)
+--------------------------
+const userSchema = new Schema({
+  
+  email: {
+    type: String,
+    unique: true,
+    required: true
+  },
+  hashedPassword: {
+    type: String,
+    required: true
+  },
+  username: {
+    type: String,
+    required: true
+  },
+  role: {
+    type: String,
+    enum: ['user', 'admin'],
+    default: 'user'
+  }
+},
+  {
+    timestamps: true
+  });
+
+module.exports = model("User", userSchema);
 ```
 
 ---
